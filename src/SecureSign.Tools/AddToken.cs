@@ -60,6 +60,7 @@ namespace SecureSign.Tools
 			var (accessToken, accessTokenConfig) = handler.CreateAccessToken(code, name);
 			var encodedAccessToken = SaveAccessToken(accessToken, accessTokenConfig);
 			Console.WriteLine();
+			Console.WriteLine("TokenID: {accessToken.Id}");
 			Console.WriteLine("Created new access token:");
 			Console.WriteLine(encodedAccessToken);
 			return 0;
