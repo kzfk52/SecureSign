@@ -74,6 +74,7 @@ namespace SecureSign.Tools.KeyHandlers
 			Console.WriteLine("Signing settings:");
 			var desc = ConsoleUtils.Prompt("Description");
 			var url = ConsoleUtils.Prompt("Product/Application URL");
+			var timestampUrl = ConsoleUtils.Prompt($"RFC3161 Timestamp URL");
 
 			var accessToken = new AccessToken
 			{
@@ -87,6 +88,7 @@ namespace SecureSign.Tools.KeyHandlers
 				Comment = comment,
 				IssuedAt = accessToken.IssuedAt,
 				Valid = true,
+				TimeStampUrl = !string.IsNullOrEmpty(timestampUrl) ? timestampUrl : null,
 
 				SignDescription = desc,
 				SignUrl = url,
