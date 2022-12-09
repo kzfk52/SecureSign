@@ -8,6 +8,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SecureSign.Core;
+using SecureSign.Core.Models;
 using SecureSign.Core.Signers;
 using SecureSign.Web.Models;
 
@@ -56,7 +57,7 @@ namespace SecureSign.Web.Controllers
 				return artifactError;
 			}
 
-			var signed = await _signer.SignAsync(artifact, cert, tokenConfig.SignDescription, tokenConfig.SignUrl, fileExtention);
+			var signed = await _signer.SignAsync(artifact, cert, tokenConfig.SignDescription, tokenConfig.SignUrl, tokenConfig.TimeStampUrl ?? AccessTokenConfig.DefaultRfc3161TimeStampUrl, fileExtention);
 			return File(signed, "application/octet-stream");
 		}
 	}

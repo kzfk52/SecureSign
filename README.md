@@ -51,6 +51,7 @@ Comment (optional)? Hello World
 Signing settings:
 Description? Some App
 Product/Application URL? https://dan.cx/SecureSignSample/
+RFC3161 Timestamp URL? 
 
 Created new access token:
 zGZEtxVisE2rqSf71SVqNg-CfDJ8BqN7wE-jn1Hj20Xn2jQTrtxA6zDlrQn0C3Ut....

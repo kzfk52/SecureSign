@@ -51,8 +51,9 @@ namespace SecureSign.Core.Signers
 		/// <param name="cert">Certificate to use for signing</param>
 		/// <param name="description">Description to sign the object with</param>
 		/// <param name="url">URL to include in the signature</param>
+		/// <param name="timestampUrl">URL to RFC3161 TimestampServer Url</param>
 		/// <returns>A signed copy of the file</returns>
-		public async Task<Stream> SignAsync(Stream input, X509Certificate2 cert, string description, string url, string fileExtention)
+		public async Task<Stream> SignAsync(Stream input, X509Certificate2 cert, string description, string url, string timestampUrl, string fileExtention)
 		{
 			// Temporarily save the cert to disk with a random password, as osslsigncode needs to read it from disk.
 			var password = _passwordGenerator.Generate();
@@ -70,16 +71,16 @@ namespace SecureSign.Core.Signers
 				{
 					if (fileExtention.Contains("ps"))
 					{
-						return await SignUsingPowerShellAsync(inputFile, certFile, password);
+						return await SignUsingPowerShellAsync(inputFile, certFile, password, timestampUrl);
 					}
 					else
 					{
-						return await SignUsingSignToolAsync(inputFile, certFile, password, description, url);
+						return await SignUsingSignToolAsync(inputFile, certFile, password, description, url, timestampUrl);
 					}
 				}
 				else
 				{
-					return await SignUsingOpenSsl(inputFile, certFile, password, description, url);
+					return await SignUsingOpenSsl(inputFile, certFile, password, description, url, timestampUrl);
 				}
 
 			}
@@ -97,8 +98,9 @@ namespace SecureSign.Core.Signers
 		/// <param name="certPassword">Password for the certificate</param>
 		/// <param name="description">Description to sign the object with</param>
 		/// <param name="url">URL to include in the signature</param>
+		/// <param name="timestampUrl">URL to RFC3161 TimestampServer Url</param>
 		/// <returns>A signed copy of the file</returns>
-		private async Task<Stream> SignUsingSignToolAsync(string inputFile, string certFile, string certPassword, string description, string url)
+		private async Task<Stream> SignUsingSignToolAsync(string inputFile, string certFile, string certPassword, string description, string url, string timestampUrl)
 		{
 			await RunProcessAsync(
 				_pathConfig.SignTool,
@@ -110,7 +112,7 @@ namespace SecureSign.Core.Signers
 					$"/p \"{CommandLineEncoder.Utils.EncodeArgText(certPassword)}\"",
 					$"/d \"{CommandLineEncoder.Utils.EncodeArgText(description)}\"",
 					$"/du \"{CommandLineEncoder.Utils.EncodeArgText(url)}\"",
-					"/tr http://timestamp.digicert.com",
+					$"/tr {timestampUrl}",
 					"/td sha256",
 					"/fd sha256",
 					$"\"{CommandLineEncoder.Utils.EncodeArgText(inputFile)}\"",
@@ -127,8 +129,9 @@ namespace SecureSign.Core.Signers
 		/// <param name="inputFile">File to sign</param>
 		/// <param name="certFile">Path to the certificate to use for signing</param>
 		/// <param name="certPassword">Password for the certificate</param>
+		/// <param name="timestampUrl">URL to RFC3161 TimestampServer Url</param>
 		/// <returns>A signed copy of the file</returns>
-		private async Task<Stream> SignUsingPowerShellAsync(string inputFile, string certFile, string certPassword)
+		private async Task<Stream> SignUsingPowerShellAsync(string inputFile, string certFile, string certPassword, string timestampUrl)
 		{
 			await RunProcessAsync(
 				"powershell.exe",
@@ -137,7 +140,7 @@ namespace SecureSign.Core.Signers
 					"-command",
 					"\"$Cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2;",
 					$"$Cert.Import('{CommandLineEncoder.Utils.EncodeArgText(certFile)}','{CommandLineEncoder.Utils.EncodeArgText(certPassword)}',[System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet);",
-					$"Set-AuthenticodeSignature '{CommandLineEncoder.Utils.EncodeArgText(inputFile)}' $Cert -Timestamp http://timestamp.digicert.com\"",
+					$"Set-AuthenticodeSignature '{CommandLineEncoder.Utils.EncodeArgText(inputFile)}' $Cert -Timestamp {timestampUrl}\"",
 				}
 			);
 
@@ -153,9 +156,10 @@ namespace SecureSign.Core.Signers
 		/// <param name="certPassword">Password for the certificate</param>
 		/// <param name="description">Description to sign the object with</param>
 		/// <param name="url">URL to include in the signature</param>
+		/// <param name="timestampUrl">URL to RFC3161 TimestampServer Url</param>
 		/// <returns>A signed copy of the file</returns>
 		private async Task<Stream> SignUsingOpenSsl(string inputFile, string certFile, string certPassword,
-			string description, string url)
+			string description, string url, string timestampUrl)
 		{
 			// An intermediate file is used for dual signing since osslsigncode no longer supports in-place signing.
 			var intermediateFile = Path.GetTempFileName();
@@ -182,7 +186,7 @@ namespace SecureSign.Core.Signers
 				// Reference: http://www.elstensoftware.com/blog/2016/02/10/dual-signing-osslsigncode/
 
 				// First sign with SHA1
-				await RunOsslSignCodeAsync(certFile, certPasswordFile, description, url, new[]
+				await RunOsslSignCodeAsync(certFile, certPasswordFile, description, url, timestampUrl, new[]
 				{
 					"-h sha1",
 					$"-in \"{CommandLineEncoder.Utils.EncodeArgText(inputFile)}\"",
@@ -190,7 +194,7 @@ namespace SecureSign.Core.Signers
 				});
 
 				// Now sign with SHA256
-				await RunOsslSignCodeAsync(certFile, certPasswordFile, description, url, new[]
+				await RunOsslSignCodeAsync(certFile, certPasswordFile, description, url, timestampUrl, new[]
 				{
 					"-nest",
 					"-h sha2",
@@ -206,12 +210,12 @@ namespace SecureSign.Core.Signers
 			}
 		}
 
-		private async Task RunOsslSignCodeAsync(string certFile, string certPasswordFile, string description, string url, string[] extraArgs)
+		private async Task RunOsslSignCodeAsync(string certFile, string certPasswordFile, string description, string url, string timestampUrl, string[] extraArgs)
 		{
 			var args = new List<string>
 			{
 				"sign",
-				"-ts http://timestamp.digicert.com",
+				$"-ts {timestampUrl}",
 				$"-n \"{CommandLineEncoder.Utils.EncodeArgText(description)}\"",
 				$"-i \"{CommandLineEncoder.Utils.EncodeArgText(url)}\"",
 				$"-pkcs12 \"{CommandLineEncoder.Utils.EncodeArgText(certFile)}\"",
