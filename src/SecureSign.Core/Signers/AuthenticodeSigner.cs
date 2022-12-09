@@ -189,6 +189,7 @@ namespace SecureSign.Core.Signers
 				await RunOsslSignCodeAsync(certFile, certPasswordFile, description, url, timestampUrl, new[]
 				{
 					"-h sha1",
+					$"-t \"{timestampUrl}\"",
 					$"-in \"{CommandLineEncoder.Utils.EncodeArgText(inputFile)}\"",
 					$"-out \"{CommandLineEncoder.Utils.EncodeArgText(intermediateFile)}\"",
 				});
@@ -198,6 +199,7 @@ namespace SecureSign.Core.Signers
 				{
 					"-nest",
 					"-h sha2",
+					$"-ts \"{timestampUrl}\"",
 					$"-in \"{CommandLineEncoder.Utils.EncodeArgText(intermediateFile)}\"",
 					$"-out \"{CommandLineEncoder.Utils.EncodeArgText(outputFile)}\"",
 				});
@@ -215,7 +217,6 @@ namespace SecureSign.Core.Signers
 			var args = new List<string>
 			{
 				"sign",
-				$"-ts \"{timestampUrl}\"",
 				$"-n \"{CommandLineEncoder.Utils.EncodeArgText(description)}\"",
 				$"-i \"{CommandLineEncoder.Utils.EncodeArgText(url)}\"",
 				$"-pkcs12 \"{CommandLineEncoder.Utils.EncodeArgText(certFile)}\"",
