@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureSign.Web", "SecureSign.Web\SecureSign.Web.csproj", "{BD40EDCD-D078-47FA-B426-543819A3F950}"
 EndProject
@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{92CCAFB3-3D0E-4510-B452-993EA34DB922}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{03D50CFA-CFD7-4CBD-AE9E-0340077C86A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03D50CFA-CFD7-4CBD-AE9E-0340077C86A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03D50CFA-CFD7-4CBD-AE9E-0340077C86A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CCAFB3-3D0E-4510-B452-993EA34DB922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CCAFB3-3D0E-4510-B452-993EA34DB922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CCAFB3-3D0E-4510-B452-993EA34DB922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CCAFB3-3D0E-4510-B452-993EA34DB922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

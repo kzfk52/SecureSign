@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "securesign.web",
+      "composeLaunchUrl": "{Scheme}://127.0.0.1:{ServicePort}/ping",
+      "serviceActions": {
+        "securesign.tools": "DoNotStart",
+        "securesign.web": "StartDebugging"
+      }
+    }
+  }
+}

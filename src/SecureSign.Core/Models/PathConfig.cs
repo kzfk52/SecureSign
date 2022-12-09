@@ -37,7 +37,7 @@ namespace SecureSign.Core.Models
 		/// <summary>
 		/// Gets the full path that access token information is stored in
 		/// </summary>
-		public string AccessTokenConfig => Path.Combine(Root, ACCESS_TOKEN_FILENAME);
+		public string AccessTokenConfig => Path.Combine(EncryptionKeys, ACCESS_TOKEN_FILENAME);
 
 		/// <summary>
 		/// Gets the full path to SecureSign's GnuPG home directory

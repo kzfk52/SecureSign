@@ -57,7 +57,7 @@ Created new access token:
 zGZEtxVisE2rqSf71SVqNg-CfDJ8BqN7wE-jn1Hj20Xn2jQTrtxA6zDlrQn0C3Ut....
 ```
 
-Some of the access token information is saved into `accessTokenConfig.json`. Removing the access token from this config file will revoke its access.
+Some of the access token information is saved into `keys/accessTokenConfig.json`. Removing the access token from this config file will revoke its access.
 
 Now that an access token has been created, you can start the server:
 ```

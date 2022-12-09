@@ -1,0 +1,52 @@
+services:
+  securesign.web:
+    image: ${DOCKER_REGISTRY-}securesign:web
+    build:
+      context: .
+      dockerfile: SecureSign.Web/Dockerfile
+    env_file:
+      - ./.env
+    volumes:
+      - type: volume
+        source: keys
+        target: /app/keys
+        volume:
+          nocopy: true
+      - type: volume
+        source: secrets
+        target: /app/secrets
+        volume:
+          nocopy: true
+      - type: volume
+        source: dotmicrosoft
+        target: /app/.microsoft
+        volume:
+          nocopy: true
+      - type: volume
+        source: dotaspnet
+        target: /app/.aspnet
+        volume:
+          nocopy: true
+
+  securesign.tools:
+    image: ${DOCKER_REGISTRY-}securesign:tools
+    build:
+      context: .
+      dockerfile: SecureSign.Tools/Dockerfile
+    volumes:
+      - type: volume
+        source: keys
+        target: /app/keys
+        volume:
+          nocopy: true
+      - type: volume
+        source: secrets
+        target: /app/secrets
+        volume:
+          nocopy: true
+
+volumes:
+  keys:
+  secrets:
+  dotmicrosoft:
+  dotaspnet:
