@@ -40,7 +40,7 @@ namespace SecureSign.Core.Models
 		public string SignUrl { get; set; }
 
 		/// <summary>
-		/// URL to include in Authenticode metadata for signing requests performed with this access token
+		/// URL to Authenticode Timestamp signature request
 		/// </summary>
 		public string TimeStampUrl { get; set; }
 
