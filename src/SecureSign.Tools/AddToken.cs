@@ -42,7 +42,7 @@ namespace SecureSign.Tools
 
 		public int Run()
 		{
-			var name = ConsoleUtils.Prompt("Key name");
+			var name = ConsoleUtils.Prompt("Key name (pkcs12 base_filename.pfx)");
 			var code = ConsoleUtils.Prompt("Secret code");
 
 			try

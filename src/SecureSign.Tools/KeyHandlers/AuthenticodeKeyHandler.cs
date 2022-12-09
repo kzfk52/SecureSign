@@ -49,11 +49,12 @@ namespace SecureSign.Tools.KeyHandlers
 			var code = _passwordGenerator.Generate();
 			_secretStorage.SaveSecret(fileName, cert, code);
 			Console.WriteLine();
-			Console.WriteLine($"Saved {fileName} ({cert.FriendlyName})");
+			Console.WriteLine($"Saved {fileName} (FriendlyName={cert.FriendlyName})");
 			Console.WriteLine($"Subject: {cert.SubjectName.Format(false)}");
 			Console.WriteLine($"Issuer: {cert.IssuerName.Format(false)}");
 			Console.WriteLine($"Valid from {cert.NotBefore} until {cert.NotAfter}");
 			Console.WriteLine();
+			Console.WriteLine($"addtoken KeyName: {fileName}");
 			Console.WriteLine($"Secret Code: {code}");
 		}
 
