@@ -15,6 +15,9 @@ namespace SecureSign.Core.Models
 	/// </summary>
 	public class AccessTokenConfig
 	{
+
+		public const string DefaultRfc3161TimeStampUrl = @"http://timestamp.digicert.com";
+
 		/// <summary>
 		/// Time this access token was issued at 
 		/// </summary>
@@ -35,6 +38,11 @@ namespace SecureSign.Core.Models
 		/// URL to include in Authenticode metadata for signing requests performed with this access token
 		/// </summary>
 		public string SignUrl { get; set; }
+
+		/// <summary>
+		/// URL to include in Authenticode metadata for signing requests performed with this access token
+		/// </summary>
+		public string TimeStampUrl { get; set; }
 
 		/// <summary>
 		/// Description to include in Authenticode metadata for signing requests performed with this access token
